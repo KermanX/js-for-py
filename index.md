@@ -162,12 +162,19 @@ JavaScript 的语法总体上和C/C++非常相近，与Python也有很多相似�
 
   | 字符名称 | 转义字符串 |
   | ------ | -------- |
-  | 换行符  | `"\n"`(**n**ext line) |
-  | 制表符  | `"\t"`(**t**ab) |
+  | 换行符  | `\n`(**n**ext line) |
+  | 制表符  | `\t`(**t**ab) |
   | 引号    | `\'`和`\"`，JS中还有<code>\\`</code> |
   | 反斜杠  | `\\`     |
 
   > 在一种引号中使用另外一种引号不需要转义：`"say 'hello'"`和`'say "hi"'`都是合法的字符串字面量。
+
+  要获取一个字符串的长度，在Python中可以使用`len()`函数。在JavaScript中，我们使用字符串的`length`属性：
+
+  ```javascript
+  const s="123456";
+  s.length //--> 6
+  ```
 
 3. 数组(`Array`)
 
@@ -178,12 +185,18 @@ JavaScript 的语法总体上和C/C++非常相近，与Python也有很多相似�
   arr[1] //--> 2
   ```
 
-  要获取一个数组的元素个数，在Python中可以使用`len()`函数。在JavaScipt中，我们使用数组的`length`属性：
+  数组的长度也可以通过`length`属性获得：
 
   ```javascript
   const arr=["a","b","c"];
   arr.length //--> 3
   ```
+
+  > 需要注意的是，虽然字符串和数组表示长度的属性都叫`length`，但是它们是完全不同的两个属性，除名字相同外没有任何关联。
+  >
+  > 而Python中的`len()`函数无论作用于字符串、数组还是元组等等，都是同一个函数。
+  >
+  > %链接到后面段落%
 
 ### 变量
 
@@ -250,10 +263,10 @@ function F(){
   retuan false;
 }
 
-let a=T()&&F(); //-->false，输出：TF
-let b=F()&&T(); //-->false，输出：F
-let c=T()||F(); //-->true ，输出：T
-let d=F()||T(); //-->true ，输出：FT
+let a=T()&&F(); //--> false，输出：TF
+let b=F()&&T(); //--> false，输出：F
+let c=T()||F(); //--> true ，输出：T
+let d=F()||T(); //--> true ，输出：FT
 ```
 
 显然，逻辑与 和 逻辑或 运算，从结果上看，是满足交换率的；但是由于“短路”的特性，交换顺序之后运行结果并不相同。
@@ -327,7 +340,8 @@ if (a % 3 === 0) {
 > 在 JavaScript 中，无论`if`、`else`还是`for`，都默认作用在紧接着的**第一个**语句上，就像这样：
 >
 > ```javascript
-> if (cond1) console.log("print if cond1 is true");
+> if (cond1)
+>   console.log("print if cond1 is true");
 > console.log("always print");
 > ```
 >
@@ -373,7 +387,7 @@ for (let i = 0; i < 10; i++) {
 }
 ```
 
-以下代码遍历了一个数组(array, 可以简单理解为 list)，则与 Python 的写法几乎没有区别：
+以下代码遍历了一个数组，与Python里的写法几乎没有区别：
 
 ```javascript
 const arr = [1, 2, 3];
@@ -392,7 +406,7 @@ for (const x of arr) {
 - 拆分步骤：避免出现一段非常长连续代码，增强可读性
 - 作为过程：可以传递给高阶函数，也可以进行更加复杂的流程控制
 
-在 JavaScript 中，使用`function`关键字定义函数，就像 Python 中的`def`关键字：
+JavaScript使用`function`关键字定义函数，就像 Python 中的`def`关键字：
 
 ```javascript
 function fn(x, y, z = 0) {
@@ -400,7 +414,7 @@ function fn(x, y, z = 0) {
 }
 ```
 
-其中，`z = 0`表示一个有默认值的参数，可以有多个，但只能放在最后，与在 Python 中是一样的。
+其中，`z = 0`表示一个有默认值的参数，可以有多个，但只能放在最后，（Python中对于位置参数也有这样的规定）。
 
 值得注意的是，有默认值的参数只能放在最后的缺点，恰是 Python 关键字参数的优点之一。
 
@@ -434,8 +448,8 @@ Python 的参数分为 3 类：
 调用函数：
 
 ```javascript
-fn(1, 2, 3); //-->7
-fn(4, 5); //-->4，等价于 fn(4, 5, 0)
+fn(1, 2, 3); //--> 7
+fn(4, 5);    //--> 4，等价于 fn(4, 5, 0)
 ```
 
 > **TypeScript**
@@ -560,11 +574,11 @@ const expended = {
 });
 ```
 
-用这种方式，可以实现合并两个对象/数组：
+用这种方式，可以轻松实现合并两个对象/数组：
 
 ```javascript
-const arr = [...arr1, arr2];
-const obj = { ...obj1, obj2 };
+const arr = [...arr1, ...arr2];
+const obj = { ...obj1, ...obj2 };
 ```
 
 > 注：**解包实际上进行了一次迭代，并将迭代的结果传递下去**，因此，只有可迭代出来的成员可以被解包。以下两类成员不可被迭代，因此不会被解包：
@@ -572,7 +586,7 @@ const obj = { ...obj1, obj2 };
 > 1. 继承自原型的成员
 > 2. 描述符(descriptor)被设置为`enumerable: false`的成员
 >
-> 这也是为什么，数组作为对象，解包时不会给出诸如`[].push`这样的方法。
+> 这也是为什么，数组作为一个对象，解包时不会给出诸如`[].push`这样的方法。
 
 ## 索引/成员
 
